@@ -49,5 +49,5 @@ class CounterDaoImpl extends CounterDao {
       }
     }.toVector
 
-  def getAll : Seq[Counter] = counters.values.toVector
+  def getAll: Seq[Counter] = counters.values.toVector
 }

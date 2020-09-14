@@ -4,25 +4,26 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
-import io.circe.generic.auto._
 import io.circe.Encoder
+import io.circe.generic.auto._
 import io.circe.syntax.EncoderOps
 import ru.otus.sc.countdown.model.Countdown.{Done, Tick}
-import ru.otus.sc.countdown.model.GetCountdownRequest
-import ru.otus.sc.route.BaseRouter
-import ru.otus.sc.countdown.model._
+import ru.otus.sc.countdown.model.{GetCountdownRequest, _}
 import ru.otus.sc.countdown.service.CountdownService
-
+import ru.otus.sc.route.BaseRouter
 
 class CountdownRouter(service: CountdownService) extends BaseRouter {
+
   /**
-  * manual sealed trait Countdown encoding,
-  * due to escape extra case class name in JSON like {"Tick": {...}}
-  */
+    * manual sealed trait Countdown encoding,
+    * due to escape extra case class name in JSON like {"Tick": {...}}
+    */
   private implicit val encoder: Encoder[Countdown] = Encoder.instance {
     case tick @ Tick(_, _, _) => tick.asJson
-    case done @ Done(_) => done.asJson
-}
+    case done @ Done(_)       => done.asJson
+  }
+  private val GetCountdownId = JavaUUID.map(GetCountdownRequest)
+  private val DeleteCountdownId = JavaUUID.map(DeleteCountdownRequest)
 
   def route: Route =
     pathPrefix("countdowns") {
@@ -30,7 +31,6 @@ class CountdownRouter(service: CountdownService) extends BaseRouter {
         updateCountdownTick ~ updateCountdownDone ~ deleteCountdown ~ getAll
     }
 
-  private val GetCountdownId = JavaUUID.map(GetCountdownRequest)
   private def getCountdown: Route =
     (get & path(GetCountdownId)) { countdownId =>
       service.getCountdown(countdownId) match {
@@ -42,14 +42,14 @@ class CountdownRouter(service: CountdownService) extends BaseRouter {
     }
 
   private def getAll: Route = {
-      (get & path(PathEnd))
-      service.findCountdowns(FindCountdownsRequest.GetAll) match {
-        case FindCountdownsResponse.Result(c) => complete(c)}
+    (get & path(PathEnd))
+    service.findCountdowns(FindCountdownsRequest.GetAll) match {
+      case FindCountdownsResponse.Result(c) => complete(c)
     }
+  }
 
   private def createCountdownTick: Route =
     (post & entity(as[Countdown.Tick])) { countdown =>
-
       service.createCountdown(CreateCountdownRequest(countdown)) match {
         case CreateCountdownResponse.Created(c) =>
           complete(c)
@@ -57,9 +57,9 @@ class CountdownRouter(service: CountdownService) extends BaseRouter {
           complete(StatusCodes.UnprocessableEntity)
       }
     }
+
   private def createCountdownDone: Route =
     (post & entity(as[Countdown.Done])) { countdown =>
-
       service.createCountdown(CreateCountdownRequest(countdown)) match {
         case CreateCountdownResponse.Created(c) =>
           complete(c)
@@ -92,7 +92,6 @@ class CountdownRouter(service: CountdownService) extends BaseRouter {
       }
     }
 
-  private val DeleteCountdownId = JavaUUID.map(DeleteCountdownRequest)
   private def deleteCountdown: Route =
     (delete & path(DeleteCountdownId)) { countdownId =>
       service.deleteCountdown(countdownId) match {

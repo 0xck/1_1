@@ -9,13 +9,9 @@ import ru.otus.sc.route.BaseRouter
 import ru.otus.sc.user.model._
 import ru.otus.sc.user.service.UserService
 
-
 class UserRouter(service: UserService) extends BaseRouter {
 
-  def route: Route =
-    pathPrefix("users") {
-      getUser ~ createUser ~ updateUser ~ deleteUser ~ getAll
-    }
+  private val GetUserId = JavaUUID.map(GetUserRequest)
 
   /*
    * CRUD:
@@ -33,8 +29,13 @@ class UserRouter(service: UserService) extends BaseRouter {
    *
    *
    * */
+  private val DeleteUserId = JavaUUID.map(DeleteUserRequest)
 
-  private val GetUserId = JavaUUID.map(GetUserRequest)
+  def route: Route =
+    pathPrefix("users") {
+      getUser ~ createUser ~ updateUser ~ deleteUser ~ getAll
+    }
+
   private def getUser: Route =
     (get & path(GetUserId)) { userId =>
       service.getUser(userId) match {
@@ -46,14 +47,14 @@ class UserRouter(service: UserService) extends BaseRouter {
     }
 
   private def getAll: Route = {
-      (get & path(PathEnd))
-        service.findUsers(FindUsersRequest.GetAll) match {
-          case FindUsersResponse.Result(u) => complete(u)}
+    (get & path(PathEnd))
+    service.findUsers(FindUsersRequest.GetAll) match {
+      case FindUsersResponse.Result(u) => complete(u)
     }
+  }
 
   private def createUser: Route =
     (post & entity(as[User])) { user =>
-
       service.createUser(CreateUserRequest(user)) match {
         case CreateUserResponse.Created(u) =>
           complete(u)
@@ -64,7 +65,6 @@ class UserRouter(service: UserService) extends BaseRouter {
 
   private def updateUser: Route =
     (put & entity(as[User])) { user =>
-
       service.updateUser(UpdateUserRequest(user)) match {
         case UpdateUserResponse.Updated(u) =>
           complete(u)
@@ -77,7 +77,6 @@ class UserRouter(service: UserService) extends BaseRouter {
       }
     }
 
-  private val DeleteUserId = JavaUUID.map(DeleteUserRequest)
   private def deleteUser: Route =
     (delete & path(DeleteUserId)) { userId =>
       service.deleteUser(userId) match {

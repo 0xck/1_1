@@ -7,11 +7,11 @@ import ru.otus.sc.reverse.model.ReverseResponse
 import ru.otus.sc.reverse.service.ReverseService
 import ru.otus.sc.route.BaseRouter
 
-class ReverseRouter(service : ReverseService) extends BaseRouter {
+class ReverseRouter(service: ReverseService) extends BaseRouter {
 
   private val ReversedString = Segment
 
-  def route : Route =
+  def route: Route =
     (get & path("reverse" / ReversedString)) { string =>
       service.reverse(model.ReverseRequest(string)) match {
         case ReverseResponse(s) => complete(s)

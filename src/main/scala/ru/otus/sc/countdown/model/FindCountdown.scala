@@ -6,9 +6,9 @@ sealed trait FindCountdownsRequest
 object FindCountdownsRequest {
   case class ByValue(value: CountdownValue, predicate: CompareValues) extends FindCountdownsRequest
   case class ByUpdater(updater: UpdaterId)                            extends FindCountdownsRequest
-  case object AllDone                                                extends FindCountdownsRequest
-  case object AllNonDone                                             extends FindCountdownsRequest
-  case object GetAll                                             extends FindCountdownsRequest
+  case object AllDone                                                 extends FindCountdownsRequest
+  case object AllNonDone                                              extends FindCountdownsRequest
+  case object GetAll                                                  extends FindCountdownsRequest
 }
 
 sealed trait FindCountdownsResponse

@@ -33,7 +33,7 @@ class StorageServiceImpl[K, V](dao: StorageDao[K, V]) extends StorageService[K, 
     val found = request match {
       case FindStoragesRequest.ByValue(value)               => dao.findByValue(value)
       case FindStoragesRequest.ValuesByPredicate(predicate) => dao.findValuesByPredicate(predicate)
-      case FindStoragesRequest.GetAll() => dao.getAll
+      case FindStoragesRequest.GetAll()                     => dao.getAll
     }
     FindStoragesResponse.Result[K, V](found)
   }

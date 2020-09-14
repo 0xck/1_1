@@ -8,8 +8,10 @@ import ru.otus.sc.user.model.UserTag.UserTagId
 class UserTagDaoImpl extends UserTagDao {
 
   private var tags: Map[UserTagId, UserTag] = Map.empty
+
   /** tag -> users mapping, due to tag does not keep associated users itself */
   private var taggedUsers: Map[UserTagId, Set[UniqueUserId]] = Map.empty
+
   /** emulate pk for tags */
   private var id: Long = 1
 

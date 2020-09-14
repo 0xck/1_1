@@ -11,7 +11,7 @@ object Main {
 
     import system.dispatcher
 
-    val route = RoutingTable.getRoute
+    val route   = RoutingTable.getRoute
     val binding = Http().newServerAt("localhost", 8080).bind(route)
 
     binding.foreach(b => println(s"Binding on ${b.localAddress}"))

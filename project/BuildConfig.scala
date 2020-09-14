@@ -6,9 +6,6 @@ object ProjectConfig {
     val akka        = "2.6.8"
     val `akka-http` = "10.2.0"
 
-    val `akka-http-play-json` = "1.34.0"
-    val `play-json`           = "2.9.0"
-
     val circeVersion = "0.12.3"
     val `akka-http-circe` = "1.34.0"
 
@@ -37,11 +34,6 @@ object ProjectConfig {
     "com.typesafe.akka" %% "akka-http-testkit"   % versions.`akka-http`
   )
 
-  val playJsonDependencies = Seq(
-    "de.heikoseeberger" %% "akka-http-play-json" % versions.`akka-http-play-json`,
-    "com.typesafe.play" %% "play-json"           % versions.`play-json`
-  )
-
   val circeDependencies : Seq[ModuleID] = Seq(
     "io.circe" %% "circe-core",
     "io.circe" %% "circe-generic",
@@ -50,5 +42,5 @@ object ProjectConfig {
   ) ++ Seq("de.heikoseeberger" %% "akka-http-circe" % versions.`akka-http-circe`)
 
   val projectDependencies : Seq[ModuleID] =
-    testDependencies ++ akkaDependencies ++ playJsonDependencies ++ circeDependencies
+    testDependencies ++ akkaDependencies ++ circeDependencies
 }

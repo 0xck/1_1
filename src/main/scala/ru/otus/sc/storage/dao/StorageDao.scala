@@ -9,5 +9,5 @@ trait StorageDao[K, V] {
   def updateStorage(entry: StorageEntry[K, V]): Option[StorageEntry[K, V]]
   def findByValue(value: V): Seq[StorageEntry[K, V]]
   def findValuesByPredicate(predicate: V => Boolean): Seq[StorageEntry[K, V]]
-  def getAll : Seq[StorageEntry[K, V]]
+  def getAll: Seq[StorageEntry[K, V]]
 }

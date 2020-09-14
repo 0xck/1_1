@@ -6,10 +6,11 @@ import ru.otus.sc.counter.service.CounterService
 
 class CounterServiceImpl(dao: CounterDao) extends CounterService {
   def createCounter(request: CreateCounterRequest): CreateCounterResponse = {
+
     /** it can return CreateCounterResponse.Error
-    * but in current CounterDao implementation there is not option for this
-    * so emulate it with counter.value set less than 1
-    */
+      * but in current CounterDao implementation there is not option for this
+      * so emulate it with counter.value set less than 1
+      */
     if (request.counter.value < 1L)
       CreateCounterResponse.Error("Counter initial value has to be more or equal 1")
     CreateCounterResponse.Created(dao.createCounter(request.counter))

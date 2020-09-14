@@ -7,7 +7,7 @@ object FindUsersRequest {
   case class ByFirstName(firstName: String) extends FindUsersRequest
   case class ByLastName(lastName: String)   extends FindUsersRequest
   case class ByTag(tag: UserTagId)          extends FindUsersRequest
-  case object GetAll                       extends FindUsersRequest
+  case object GetAll                        extends FindUsersRequest
 }
 
 sealed trait FindUsersResponse

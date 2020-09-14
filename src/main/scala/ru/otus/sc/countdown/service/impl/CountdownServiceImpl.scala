@@ -11,10 +11,10 @@ class CountdownServiceImpl(dao: CountdownDao) extends CountdownService {
         CreateCountdownResponse.Created(dao.createCountdown(countdown))
       case countdown @ Countdown.Tick(_, _, value) =>
         /**
-        * it can return CreateCountdownResponse.Error
-        * but in current CountdownDao implementation there is not option for this
-        * so emulate it with countdown.value set less than 1
-        */
+          * it can return CreateCountdownResponse.Error
+          * but in current CountdownDao implementation there is not option for this
+          * so emulate it with countdown.value set less than 1
+          */
         if (value < 1L)
           CreateCountdownResponse.Error("Countdown initial value has to be more or equal 1")
         else
@@ -29,7 +29,7 @@ class CountdownServiceImpl(dao: CountdownDao) extends CountdownService {
   def updateCountdown(request: UpdateCountdownRequest): UpdateCountdownResponse =
     request.countdown match {
       case Countdown.Tick(None, _, _) => UpdateCountdownResponse.ErrorWrongId
-      case Countdown.Done(None) => UpdateCountdownResponse.ErrorWrongId
+      case Countdown.Done(None)       => UpdateCountdownResponse.ErrorWrongId
       case countdown @ Countdown.Tick(Some(id), _, _) =>
         dao
           .updateCountdown(countdown)

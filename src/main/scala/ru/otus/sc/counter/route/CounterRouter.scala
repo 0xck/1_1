@@ -9,16 +9,18 @@ import ru.otus.sc.counter.model.{FindCountersRequest, GetCounterRequest, GetCoun
 import ru.otus.sc.counter.service.CounterService
 import ru.otus.sc.route.BaseRouter
 
+class CounterRouter(service: CounterService) extends BaseRouter {
 
-class CounterRouter(service : CounterService) extends BaseRouter {
+  private val GetCounterId = JavaUUID.map(GetCounterRequest)
+  private val UpdateCounterId = JavaUUID.map(UpdateCounterRequest)
+  private val DeleteCounterId = JavaUUID.map(DeleteCounterRequest)
 
-  def route : Route =
+  def route: Route =
     pathPrefix("counters") {
       getCounter ~ createCounter ~ updateCounter ~ deleteCounter ~ getAll
     }
 
-  private val GetCounterId = JavaUUID.map(GetCounterRequest)
-  private def getCounter : Route =
+  private def getCounter: Route =
     (get & path(GetCounterId)) { counterId =>
       service.getCounter(counterId) match {
         case GetCounterResponse.Found(c) =>
@@ -28,16 +30,15 @@ class CounterRouter(service : CounterService) extends BaseRouter {
       }
     }
 
-  private def getAll : Route = {
+  private def getAll: Route = {
     (get & path(PathEnd))
     service.findCounters(FindCountersRequest.GetAll) match {
       case FindCountersResponse.Result(c) => complete(c)
     }
   }
 
-  private def createCounter : Route =
+  private def createCounter: Route =
     (post & entity(as[Counter])) { counter =>
-
       service.createCounter(CreateCounterRequest(counter)) match {
         case CreateCounterResponse.Created(c) =>
           complete(c)
@@ -46,8 +47,7 @@ class CounterRouter(service : CounterService) extends BaseRouter {
       }
     }
 
-  private val UpdateCounterId = JavaUUID.map(UpdateCounterRequest)
-  private def updateCounter : Route =
+  private def updateCounter: Route =
     (put & path(UpdateCounterId)) { counterId =>
       service.updateCounter(counterId) match {
         case UpdateCounterResponse.Updated(c) =>
@@ -57,8 +57,7 @@ class CounterRouter(service : CounterService) extends BaseRouter {
       }
     }
 
-  private val DeleteCounterId = JavaUUID.map(DeleteCounterRequest)
-  private def deleteCounter : Route =
+  private def deleteCounter: Route =
     (delete & path(DeleteCounterId)) { counterId =>
       service.deleteCounter(counterId) match {
         case DeleteCounterResponse.Deleted(c) =>

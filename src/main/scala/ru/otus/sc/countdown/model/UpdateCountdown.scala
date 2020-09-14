@@ -10,5 +10,5 @@ object UpdateCountdownResponse {
   case class NotFound(id: CountdownId)     extends UpdateCountdownResponse
   case object CanNotUpdateDone             extends UpdateCountdownResponse
   // when countdownId is None
-  case object ErrorWrongId                 extends UpdateCountdownResponse
+  case object ErrorWrongId extends UpdateCountdownResponse
 }

@@ -9,16 +9,17 @@ import ru.otus.sc.route.BaseRouter
 import ru.otus.sc.storage.model._
 import ru.otus.sc.storage.service.StorageService
 
-
 /** implementation for k: String -> v: String */
 class SSStorageRouter(service: StorageService[String, String]) extends BaseRouter {
+
+  private val GetStorageKey = Segment.map(GetStorageRequest[String, String])
+  private val DeleteStorageKey = Segment.map(DeleteStorageRequest[String, String])
 
   def route: Route =
     pathPrefix("storage") {
       getStorage ~ createStorage ~ updateStorage ~ deleteStorage ~ getAll
     }
 
-  private val GetStorageKey = Segment.map(GetStorageRequest[String, String])
   private def getStorage: Route =
     (get & path(GetStorageKey)) { key =>
       service.getStorage(key) match {
@@ -30,15 +31,15 @@ class SSStorageRouter(service: StorageService[String, String]) extends BaseRoute
     }
 
   private def getAll: Route = {
-      (get & path(PathEnd))
-      service.findStorages(FindStoragesRequest.GetAll()) match {
-        case FindStoragesResponse.Result(s) => complete(s)}
-
+    (get & path(PathEnd))
+    service.findStorages(FindStoragesRequest.GetAll()) match {
+      case FindStoragesResponse.Result(s) => complete(s)
     }
+
+  }
 
   private def createStorage: Route =
     (post & entity(as[StorageEntry[String, String]])) { entry =>
-
       service.createStorage(CreateStorageRequest(entry)) match {
         case CreateStorageResponse.Created(s) =>
           complete(s)
@@ -49,7 +50,6 @@ class SSStorageRouter(service: StorageService[String, String]) extends BaseRoute
 
   private def updateStorage: Route =
     (put & entity(as[StorageEntry[String, String]])) { entry =>
-
       service.updateStorage(UpdateStorageRequest(entry)) match {
         case UpdateStorageResponse.Updated(s) =>
           complete(s)
@@ -58,7 +58,6 @@ class SSStorageRouter(service: StorageService[String, String]) extends BaseRoute
       }
     }
 
-  private val DeleteStorageKey = Segment.map(DeleteStorageRequest[String, String])
   private def deleteStorage: Route =
     (delete & path(DeleteStorageKey)) { key =>
       service.deleteStorage(key) match {

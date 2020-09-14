@@ -7,17 +7,21 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 import ru.otus.sc.route.BaseRouter
 import ru.otus.sc.user.model._
-import ru.otus.sc.user.service.{UserService, UserTagService}
-
+import ru.otus.sc.user.service.UserTagService
 
 class UserTagRouter(service: UserTagService) extends BaseRouter {
+
+  private val GetUserTagId = LongNumber.map(GetUserTagRequest)
+  private val DeleteUserTagId = LongNumber.map(DeleteUserTagRequest)
+  // update tagged and untagged
+  private val UserTagId = LongNumber
+  private val UserId    = JavaUUID
 
   def route: Route =
     pathPrefix("usertags") {
       getUserTag ~ createUserTag ~ updateUserTag ~ tagUserWithTag ~ deleteUserTag ~ untagUserWithTag ~ getAll
     }
 
-  private val GetUserTagId = LongNumber.map(GetUserTagRequest)
   private def getUserTag: Route =
     (get & path(GetUserTagId)) { userTagId =>
       service.getUserTag(userTagId) match {
@@ -29,13 +33,13 @@ class UserTagRouter(service: UserTagService) extends BaseRouter {
     }
 
   private def getAll: Route = {
-      (get & path(PathEnd))
-        service.findUserTags(FindUserTagsRequest.GetAll) match {
-          case FindUserTagsResponse.TagsResult(tags) => complete(tags)
-          case _ => complete(StatusCodes.InternalServerError)
-        }
-
+    (get & path(PathEnd))
+    service.findUserTags(FindUserTagsRequest.GetAll) match {
+      case FindUserTagsResponse.TagsResult(tags) => complete(tags)
+      case _                                     => complete(StatusCodes.InternalServerError)
     }
+
+  }
 
   private def createUserTag: Route =
     (post & entity(as[UserTag])) { userTag =>
@@ -59,7 +63,6 @@ class UserTagRouter(service: UserTagService) extends BaseRouter {
       }
     }
 
-  private val DeleteUserTagId = LongNumber.map(DeleteUserTagRequest)
   private def deleteUserTag: Route =
     (delete & path(DeleteUserTagId)) { userTagId =>
       service.deleteUserTag(userTagId) match {
@@ -69,10 +72,6 @@ class UserTagRouter(service: UserTagService) extends BaseRouter {
           complete(StatusCodes.NotFound)
       }
     }
-
-  // update tagged and untagged
-  private val UserTagId = LongNumber
-  private val UserId = JavaUUID
 
   private def tagUserWithTag: Route =
     (put & path(UserTagId / UserId)) { (tag, user) =>
