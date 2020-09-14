@@ -18,7 +18,7 @@ class SumDaoImpl extends SumDao {
     result.toString
   }
 
-  // Can not use Thread.sleep, so emulate delay with fibonacci 10000000000 calculation
+  /** Can not use Thread.sleep, so emulate delay with fibonacci 10000000000 calculation */
   private def fib(n: Long): Long = {
     @tailrec
     def fib_tail(n: Long, a: Long, b: Long): Long = {

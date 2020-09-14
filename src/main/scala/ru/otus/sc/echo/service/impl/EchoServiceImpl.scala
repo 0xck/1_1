@@ -8,6 +8,6 @@ class EchoServiceImpl(dao: EchoDao) extends EchoService {
 
   def echo(request: EchoRequest): EchoResponse =
     if (request.repeatNum > 0 & request.repeatNum <= 5)
-      EchoResponse.Answer(s"${dao.getResponse(request.echoRequest, request.repeatNum)}")
+      EchoResponse.Response(s"${dao.getResponse(request.echoRequest, request.repeatNum)}")
     else EchoResponse.Error("Number of replies has to be from 1 to 5")
 }

@@ -6,9 +6,11 @@ import ru.otus.sc.user.service.UserTagService
 
 class UserTagServiceImpl(dao: UserTagDao) extends UserTagService {
   def createUserTag(request: CreateUserTagRequest): CreateUserTagResponse = {
-    // it can return CreateUserTagResponse.Error
-    // but in current UserTagDao implementation there is not option for this
-    // so emulate it with palindrome or empty tag name
+    /**
+    * it can return CreateUserTagResponse.Error
+    * but in current UserTagDao implementation there is not option for this
+    * so emulate it with palindrome or empty tag name
+    */
     val tagName = request.tag.tagName
     if (tagName == tagName.reverse)
       CreateUserTagResponse.Error(
@@ -46,7 +48,7 @@ class UserTagServiceImpl(dao: UserTagDao) extends UserTagService {
         FindUserTagsResponse.TagsResult(dao.findByName(tagName))
       case FindUserTagsRequest.UsersByTag(tagId) =>
         FindUserTagsResponse.UsersResult(dao.getUsersByTag(tagId))
-      case FindUserTagsRequest.GetAll() =>
+      case FindUserTagsRequest.GetAll =>
         FindUserTagsResponse.TagsResult(dao.getAllTags)
     }
 

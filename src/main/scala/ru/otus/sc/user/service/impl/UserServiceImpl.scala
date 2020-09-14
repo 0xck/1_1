@@ -6,9 +6,11 @@ import ru.otus.sc.user.service.UserService
 
 class UserServiceImpl(dao: UserDao) extends UserService {
   def createUser(request: CreateUserRequest): CreateUserResponse = {
-    // it can return CreateUserResponse.Error
-    // but in current UserDao implementation there is not option for this
-    // so emulate it with palindrome or empty name
+    /**
+    * it can return CreateUserResponse.Error
+    * but in current UserDao implementation there is not option for this
+    * so emulate it with palindrome or empty name
+    */
     val userName = request.user.name.firstName
     if (userName == userName.reverse)
       CreateUserResponse.Error("palindrome or empty name is not allowed in current DB version")
@@ -50,7 +52,7 @@ class UserServiceImpl(dao: UserDao) extends UserService {
         FindUsersResponse.Result(dao.findByLastName(lastName))
       case FindUsersRequest.ByTag(tagId) =>
         FindUsersResponse.Result(dao.findByTag(tagId))
-      case FindUsersRequest.GetAll() =>
+      case FindUsersRequest.GetAll =>
         FindUsersResponse.Result(dao.getAllUsers)
     }
 }

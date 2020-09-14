@@ -11,4 +11,5 @@ trait CounterDao {
   def updateCounter(id: CounterId): Option[Counter]
   def findCountersByValue(value: CounterValue, predicate: CompareValues): Seq[Counter]
   def findCountersByTimestamp(timestamp: CounterTime, predicate: CompareTimes): Seq[Counter]
+  def getAll : Seq[Counter]
 }

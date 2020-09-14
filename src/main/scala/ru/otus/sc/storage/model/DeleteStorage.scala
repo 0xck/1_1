@@ -1,6 +1,6 @@
 package ru.otus.sc.storage.model
 
-case class DeleteStorageRequest[K, _](key: K)
+case class DeleteStorageRequest[K, V](key: K)
 
 trait DeleteStorageResponse[K, V]
 object DeleteStorageResponse {

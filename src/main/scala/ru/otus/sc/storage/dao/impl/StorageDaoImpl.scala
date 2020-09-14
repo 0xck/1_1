@@ -42,4 +42,6 @@ class StorageDaoImpl[K, V] extends StorageDao[K, V] {
     storages.collect {
       case (k, v) if predicate(v) => StorageEntry[K, V](k, v)
     }.toVector
+
+  def getAll : Seq[StorageEntry[K, V]] = storages.map(x => StorageEntry[K, V](x._1, x._2)).toVector
 }

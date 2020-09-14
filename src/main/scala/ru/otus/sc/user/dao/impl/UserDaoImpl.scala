@@ -10,7 +10,7 @@ import ru.otus.sc.user.model.UserTag.UserTagId
 class UserDaoImpl extends UserDao {
 
   private var users: Map[UniqueUserId, User] = Map.empty
-  // emulate pk for users
+  /** emulate pk for users */
   private var id: Long = 1
 
   def createUser(user: User): User = {
@@ -27,8 +27,10 @@ class UserDaoImpl extends UserDao {
     for {
       uniqueId  <- user.uniqueId
       existUser <- users.get(uniqueId)
-      // only uniqueId is required for user, id might not exist
-      // if id exists then it has to match existing user id
+      /**
+      * only uniqueId is required for user, id might not exist
+      * if id exists then it has to match existing user id
+      */
       if user.id.isEmpty || existUser.id == user.id
     } yield {
       val newUser = if (user.id.isEmpty) user.copy(id = existUser.id) else user

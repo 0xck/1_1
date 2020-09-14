@@ -9,6 +9,7 @@ object FindCountersRequest {
   case class ByValue(value: CounterValue, predicate: CompareValues) extends FindCountersRequest
   case class ByTimestamp(timestamp: CounterTime, predicate: CompareTimes)
       extends FindCountersRequest
+  case object GetAll extends FindCountersRequest
 }
 
 sealed trait FindCountersResponse

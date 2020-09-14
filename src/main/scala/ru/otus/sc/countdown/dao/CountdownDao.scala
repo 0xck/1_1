@@ -12,4 +12,5 @@ trait CountdownDao {
   def findCountdownsByUpdater(updater: UpdaterId): Seq[Countdown]
   def findAllDone: Seq[Countdown]
   def findAllNonDone: Seq[Countdown]
+  def getAll: Seq[Countdown]
 }

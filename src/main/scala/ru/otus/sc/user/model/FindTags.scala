@@ -7,7 +7,7 @@ sealed trait FindUserTagsRequest
 object FindUserTagsRequest {
   case class ByName(tagName: String)    extends FindUserTagsRequest
   case class UsersByTag(tag: UserTagId) extends FindUserTagsRequest
-  case class GetAll()                   extends FindUserTagsRequest
+  case object GetAll                   extends FindUserTagsRequest
 }
 
 sealed trait FindUserTagsResponse

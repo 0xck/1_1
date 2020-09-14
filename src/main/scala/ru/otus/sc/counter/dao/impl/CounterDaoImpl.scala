@@ -48,4 +48,6 @@ class CounterDaoImpl extends CounterDao {
         case Some(time) if predicate(timestamp, time) => counter
       }
     }.toVector
+
+  def getAll : Seq[Counter] = counters.values.toVector
 }

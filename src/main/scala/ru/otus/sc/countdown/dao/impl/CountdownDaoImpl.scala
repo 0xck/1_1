@@ -4,7 +4,7 @@ import java.util.UUID
 
 import ru.otus.sc.countdown.dao.CountdownDao
 import ru.otus.sc.countdown.model.Countdown
-import ru.otus.sc.countdown.model.Countdown.{CompareValues, CountdownId, CountdownValue, UpdaterId}
+import ru.otus.sc.countdown.model.Countdown.{CompareValues, CountdownId, CountdownValue, Tick, UpdaterId}
 
 class CountdownDaoImpl extends CountdownDao {
   private var countdowns = Map[CountdownId, Countdown]()
@@ -31,7 +31,7 @@ class CountdownDaoImpl extends CountdownDao {
   def getCountdown(id: CountdownId): Option[Countdown] = countdowns.get(id)
 
   def updateCountdown(countdown: Countdown): Option[Countdown] = {
-    // only CountdownTick can be updated
+    /** only Countdown.Tick can be updated */
     val (countdownId, updaterId) = countdown match {
       case Countdown.Tick(id, updater, _) => (id, Some(updater))
       case Countdown.Done(_)              => (None, None)
@@ -69,4 +69,6 @@ class CountdownDaoImpl extends CountdownDao {
 
   def findAllNonDone: Seq[Countdown] =
     countdowns.values.collect { case x @ Countdown.Tick(_, _, _) => x }.toVector
+
+  def getAll : Seq[Countdown] = countdowns.values.toVector
 }
